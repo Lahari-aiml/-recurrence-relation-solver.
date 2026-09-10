@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Solution - Recurrence Relation Solver{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="solution-header">
+        <h1 class="hero-title" style="font-size: 2.2rem; color: var(--text-primary); background: none; -webkit-text-fill-color: initial;">
+            Step-by-Step Substitution Solution
+        </h1>
+        <a href="{{ url_for('index') }}" class="btn-secondary">← Solve Another</a>
+    </div>
+
+    {% if not solution.supported %}
+    <!-- Unsupported Recurrence Alert Card -->
+    <div class="card" style="margin-bottom: 3rem;">
+        <div class="alert-error">
+            <h3>Unsupported Recurrence Pattern</h3>
+            <p>{{ solution.error_message }}</p>
+        </div>
+
+        <p style="margin-bottom: 1rem; font-weight: 600;">You can try one of these supported recurrence formats:</p>
+        <div class="preset-grid">
+            {% for example in solution.suggested_examples %}
+            <a href="{{ url_for('index') }}" class="preset-card" style="text-decoration: none;">
+                <span class="preset-formula">{{ example }}</span>
+                <span class="preset-label">Click to load on Home Page</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+
+    <!-- Input Summary Banner -->
+    <div class="input-summary-card">
+        <div class="summary-item">
+            <span class="summary-label">Recurrence:</span>
+            <span class="summary-value">${{ solution.recurrence }}$</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Base Case:</span>
+            <span class="summary-value">${{ solution.base_case }}$</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Pattern Type:</span>
+            <span class="summary-value" style="color: var(--accent-color);">{{ solution.type_name }}</span>
+        </div>
+    </div>
+
+    <!-- Step-by-Step Cards -->
+    <div class="steps-container">
+        {% for step in solution.steps %}
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">{{ step.number }}</div>
+                <div class="step-title">{{ step.title }}</div>
+            </div>
+            
+            <div class="equation-box">
+                $${{ step.equation }}$$
+            </div>
+
+            <div class="step-explanation">
+                {{ step.explanation | safe }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Final Answer Card -->
+    <div class="final-answer-card">
+        <h2 class="final-title">
+            <span>✨</span> Final Solution Summary
+        </h2>
+
+        <div class="final-grid">
+            <div>
+                <div class="final-item-label">Exact Closed-Form Solution</div>
+                <div class="final-item-value">${{ solution.exact_solution }}$</div>
+            </div>
+
+            <div>
+                <div class="final-item-label">Asymptotic Complexity</div>
+                <div class="final-item-value">
+                    <span class="complexity-badge">${{ solution.complexity_latex }}$</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="final-item-label">Solving Method</div>
+                <div class="final-item-value" style="font-size: 1.1rem; color: var(--text-secondary);">
+                    {{ solution.method }}
+                </div>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <a href="{{ url_for('index') }}" class="btn-primary" style="width: auto;">
+                ← Solve Another Recurrence
+            </a>
+            <button class="btn-secondary" id="printSolutionBtn">
+                🖨️ Print Solution
+            </button>
+            <a href="{{ url_for('index') }}" class="btn-secondary">
+                🏠 Back to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Complexity Analysis Section -->
+    <div class="complexity-explanation-section">
+        <h3>Time Complexity Breakdown</h3>
+        <p style="margin-bottom: 0.75rem;">
+            <strong>Understanding Best / Average / Worst Case Context:</strong>
+        </p>
+        <p style="color: var(--text-secondary);">
+            Recurrence relations normally describe the running time $T(n)$ directly as a deterministic mathematical function of input size $n$. Therefore, for this recurrence relation, the asymptotic complexity is <strong>${{ solution.complexity_latex }}$</strong> across all execution paths, rather than having separate best, average, or worst cases.
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

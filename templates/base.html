@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Step-by-step Recurrence Relation Solver using the Substitution Method for Design and Analysis of Algorithms (DAA).">
+    <title>{% block title %}Recurrence Relation Solver{% endblock %}</title>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- MathJax v3 configuration for typesetting LaTeX equations -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="topNavbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-brand" id="navBrand">
+                <div class="brand-icon">f(n)</div>
+                <span>Recurrence Solver</span>
+            </a>
+
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation Menu">
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" id="navHome">Home</a></li>
+                <li><a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}" id="navAbout">About</a></li>
+                <li>
+                    <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Dark/Light Mode">
+                        <span id="themeIcon">🌙</span>
+                        <span id="themeText">Dark Mode</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand">Recurrence Relation Solver</div>
+            <div class="footer-tagline">Learn • Substitute • Understand</div>
+            <div class="footer-copy">Built for students learning Design and Analysis of Algorithms (DAA).</div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

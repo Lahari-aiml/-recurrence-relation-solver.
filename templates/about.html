@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}About - Recurrence Relation Solver{% endblock %}
+
+{% block content %}
+<section class="hero" style="padding: 3rem 1.5rem 4rem 1.5rem;">
+    <div class="hero-content">
+        <h1 class="hero-title">About Recurrence Relations</h1>
+        <p class="hero-subtitle">
+            A comprehensive guide to understanding substitution methods, recursive algorithm analysis, and asymptotic notation.
+        </p>
+    </div>
+</section>
+
+<div class="container" style="margin-top: -2rem; margin-bottom: 4rem;">
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 class="card-title" style="color: var(--primary-color);">What is a Recurrence Relation?</h2>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+            In computer science and mathematics, a <strong>recurrence relation</strong> is an equation that defines a function $T(n)$ in terms of its value on smaller inputs (such as $T(n-1)$ or $T(n/2)$).
+        </p>
+        <p style="color: var(--text-secondary);">
+            Recurrence relations are the primary mathematical tool used in <strong>Design and Analysis of Algorithms (DAA)</strong> to measure the time complexity of recursive algorithms like MergeSort, QuickSort, Binary Search, and Tower of Hanoi.
+        </p>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 class="card-title" style="color: var(--primary-color);">Why are Recurrence Relations Important?</h2>
+        <ul style="padding-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+            <li><strong>Predict Performance:</strong> They allow engineers to analyze how execution time scales as input size $n$ grows to millions or billions of items.</li>
+            <li><strong>Compare Algorithms:</strong> They help compare different algorithmic paradigms (e.g., $O(n^2)$ Bubble Sort vs $O(n \log n)$ MergeSort).</li>
+            <li><strong>University Curriculum:</strong> Mastering recurrence solving is a core component of undergraduate computer science degrees (B.Tech / B.E. / B.Sc CS).</li>
+        </ul>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 class="card-title" style="color: var(--primary-color);">What is the Substitution Method?</h2>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+            The <strong>Substitution Method</strong> (also called the Iterative Method or Unrolling Method) works by repeatedly replacing the recursive term $T(\dots)$ with its definition until a pattern emerges after $k$ steps.
+        </p>
+        
+        <div class="equation-box" style="margin: 1.25rem 0;">
+            $$\text{Step 1: } T(n) = T(n-1) + c$$
+            $$\text{Step 2: } T(n) = T(n-2) + 2c$$
+            $$\text{Step 3: } T(n) = T(n-3) + 3c$$
+            $$\text{General Pattern: } T(n) = T(n-k) + kc$$
+        </div>
+
+        <p style="color: var(--text-secondary);">
+            Once the general pattern is expressed in terms of $k$, we set $n-k = 1$ (or the base case argument) to find $k = n-1$. Substituting $k$ back into the formula yields the exact closed-form solution $T(n) = c \cdot n + O(1)$.
+        </p>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 class="card-title" style="color: var(--primary-color);">When to Use the Substitution Method?</h2>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+            Students should use the Substitution Method when:
+        </p>
+        <ul style="padding-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+            <li>The recurrence does not fit standard Master Theorem rules (e.g., decrement recurrences like $T(n) = T(n-1) + n$).</li>
+            <li>You need the exact closed-form equation (e.g. $T(n) = 5n - 4$) rather than just an upper bound.</li>
+            <li>Your university examination explicitly requires step-by-step unrolling derivations.</li>
+        </ul>
+    </div>
+
+    <div class="final-answer-card" style="background: var(--primary-light); border-color: var(--primary-color);">
+        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">🎓 Built for DAA Students</h3>
+        <p style="color: var(--text-primary);">
+            This tool was designed specifically for students taking <strong>Design and Analysis of Algorithms</strong> courses to make learning recursive complexity intuitive, clear, and interactive.
+        </p>
+    </div>
+</div>
+{% endblock %}

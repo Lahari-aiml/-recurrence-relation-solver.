@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Recurrence Relation Solver - Step-by-Step Substitution Method{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">Step-by-Step Algorithm Analysis</div>
+        <h1 class="hero-title">Recurrence Relation Solver</h1>
+        <p class="hero-subtitle">
+            Solve recurrence relations step by step using the Substitution Method. Built for computer science students mastering algorithm complexity.
+        </p>
+    </div>
+</section>
+
+<!-- Main Solver Card -->
+<div class="container">
+    <div class="card solver-card">
+        <h2 class="card-title">
+            <span>⚡</span> Enter Your Recurrence Relation
+        </h2>
+
+        {% if error %}
+        <div class="alert-error" id="serverErrorAlert">
+            <h3>Notice</h3>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <div id="formClientError" class="alert-error" style="display: none;"></div>
+
+        <form action="{{ url_for('solve') }}" method="POST" id="solverForm">
+            <div class="form-group">
+                <label for="recurrence" class="form-label">Recurrence Equation $T(n)$</label>
+                <input 
+                    type="text" 
+                    id="recurrence" 
+                    name="recurrence" 
+                    class="form-control" 
+                    placeholder="Example: T(n) = T(n-1) + 5" 
+                    required 
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="base_case" class="form-label">Base Case (Optional)</label>
+                <input 
+                    type="text" 
+                    id="base_case" 
+                    name="base_case" 
+                    class="form-control" 
+                    placeholder="Example: T(1) = 1" 
+                    value="T(1) = 1" 
+                    autocomplete="off"
+                >
+            </div>
+
+            <button type="submit" class="btn-primary" id="solveSubmitBtn">
+                Solve Recurrence Step-by-Step →
+            </button>
+        </form>
+
+        <!-- Presets / Quick Examples -->
+        <div class="preset-section">
+            <div class="preset-title">Click an Example to Auto-Fill:</div>
+            <div class="preset-grid">
+                <div class="preset-card" data-formula="T(n) = T(n-1) + 5" data-base="T(1) = 1" id="preset1">
+                    <span class="preset-formula">T(n) = T(n-1) + 5</span>
+                    <span class="preset-label">Linear Decrement ($\Theta(n)$)</span>
+                </div>
+
+                <div class="preset-card" data-formula="T(n) = T(n/2) + 1" data-base="T(1) = 1" id="preset2">
+                    <span class="preset-formula">T(n) = T(n/2) + 1</span>
+                    <span class="preset-label">Binary Search ($\Theta(\log n)$)</span>
+                </div>
+
+                <div class="preset-card" data-formula="T(n) = 2T(n/2) + n" data-base="T(1) = 1" id="preset3">
+                    <span class="preset-formula">T(n) = 2T(n/2) + n</span>
+                    <span class="preset-label">MergeSort ($\Theta(n \log n)$)</span>
+                </div>
+
+                <div class="preset-card" data-formula="T(n) = 2T(n-1) + 1" data-base="T(1) = 1" id="preset4">
+                    <span class="preset-formula">T(n) = 2T(n-1) + 1</span>
+                    <span class="preset-label">Tower of Hanoi ($\Theta(2^n)$)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Info Cards Section -->
+<section class="info-section">
+    <div class="container">
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>What is a Recurrence Relation?</h3>
+                <p>
+                    A recurrence relation is an equation that defines a sequence recursively, expressing $T(n)$ in terms of smaller input sizes like $T(n-1)$ or $T(n/2)$. They are heavily used to analyze recursive algorithms.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h3>How Substitution Method Works</h3>
+                <p>
+                    The substitution method repeatedly expands the recurrence equation step-by-step until a recognizable geometric or algebraic pattern emerges after $k$ steps. Setting $k$ to reach the base case yields the closed-form solution.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h3>Why Step-by-Step Explanations Matter</h3>
+                <p>
+                    Simply knowing the final Big-$\Theta$ asymptotic bound isn't enough for university exams or deep understanding. Our solver shows every algebraic step so you learn *how* the exact formula is derived.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
