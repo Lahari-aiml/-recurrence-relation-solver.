@@ -1,118 +1,455 @@
 {% extends "base.html" %}
 
-{% block title %}Recurrence Relation Solver - Step-by-Step Substitution Method{% endblock %}
+{% block title %}Recurrence Relation Solver — Step-by-Step Substitution Method & AI Tutor{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero">
-    <div class="hero-content">
-        <div class="hero-badge">Step-by-Step Algorithm Analysis</div>
-        <h1 class="hero-title">Recurrence Relation Solver</h1>
-        <p class="hero-subtitle">
-            Solve recurrence relations step by step using the Substitution Method. Built for computer science students mastering algorithm complexity.
+<section class="hero-section">
+    <div class="hero-inner container">
+        <div class="hero-badge">
+            <span class="badge-icon">⚡</span>
+            <span class="badge-text">DAA / Algorithm Design & Analysis</span>
+        </div>
+
+        <h1 class="hero-headline">
+            Master Recurrence Relations<br>
+            <span class="hero-headline-accent">with the Substitution Method</span>
+        </h1>
+
+        <p class="hero-subtext">
+            Enter any recurrence relation and understand every algebraic substitution step, pattern identification, base-case reduction, and final asymptotic complexity ($\Theta$).
         </p>
+
+        <div class="hero-cta-group">
+            <a href="#solverSection" class="btn-hero-primary">
+                <span>⚡ Enter Recurrence Relation</span>
+            </a>
+            <button type="button" class="btn-hero-secondary" id="heroOpenTutorBtn">
+                <span>🤖 Ask AI DAA Tutor</span>
+            </button>
+        </div>
     </div>
 </section>
 
-<!-- Main Solver Card -->
-<div class="container">
-    <div class="card solver-card">
-        <h2 class="card-title">
-            <span>⚡</span> Enter Your Recurrence Relation
-        </h2>
-
-        {% if error %}
-        <div class="alert-error" id="serverErrorAlert">
-            <h3>Notice</h3>
-            <p>{{ error }}</p>
-        </div>
-        {% endif %}
-
-        <div id="formClientError" class="alert-error" style="display: none;"></div>
-
-        <form action="{{ url_for('solve') }}" method="POST" id="solverForm">
-            <div class="form-group">
-                <label for="recurrence" class="form-label">Recurrence Equation $T(n)$</label>
-                <input 
-                    type="text" 
-                    id="recurrence" 
-                    name="recurrence" 
-                    class="form-control" 
-                    placeholder="Example: T(n) = T(n-1) + 5" 
-                    required 
-                    autocomplete="off"
-                >
+<!-- Solver Main Section -->
+<section class="solver-main-section" id="solverSection">
+    <div class="container">
+        <!-- Main Solver Card -->
+        <div class="solver-card" id="solverCard">
+            <div class="solver-card-header">
+                <div class="solver-header-icon-box">
+                    <span>⚡</span>
+                </div>
+                <div class="solver-header-text">
+                    <h2 class="solver-card-title">Recurrence Relation Solver</h2>
+                    <p class="solver-card-subtitle">Step-by-Step Iterative Substitution Method</p>
+                </div>
+                <div class="solver-method-tag">
+                    <span>Substitution Method</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="base_case" class="form-label">Base Case (Optional)</label>
-                <input 
-                    type="text" 
-                    id="base_case" 
-                    name="base_case" 
-                    class="form-control" 
-                    placeholder="Example: T(1) = 1" 
-                    value="T(1) = 1" 
-                    autocomplete="off"
-                >
+            {% if error %}
+            <div class="alert-box alert-error" id="serverErrorAlert">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <h4 class="alert-title">Notice</h4>
+                    <p>{{ error }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <div id="clientErrorAlert" class="alert-box alert-error" style="display: none;">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <h4 class="alert-title">Input Requirement</h4>
+                    <p id="clientErrorMsg">Please enter a valid recurrence relation before solving.</p>
+                </div>
             </div>
 
-            <button type="submit" class="btn-primary" id="solveSubmitBtn">
-                Solve Recurrence Step-by-Step →
-            </button>
-        </form>
+            <form action="{{ url_for('solve') }}" method="POST" id="mainSolverForm" class="solver-form">
+                <div class="form-row-grid">
+                    <!-- Recurrence Relation Input -->
+                    <div class="form-group-block">
+                        <label for="recurrence" class="form-input-label">
+                            <span class="label-text">Enter Recurrence Relation</span>
+                            <span class="label-example">e.g., T(n) = 2T(n/2) + n</span>
+                        </label>
+                        <div class="input-container">
+                            <div class="input-prefix-tag">$T(n) =$</div>
+                            <input 
+                                type="text" 
+                                id="recurrence" 
+                                name="recurrence" 
+                                class="form-text-input" 
+                                placeholder="T(n-1) + 5,  2T(n/2) + n,  T(n/2) + 1..." 
+                                required 
+                                autocomplete="off"
+                                autofocus
+                            >
+                            <button type="button" class="btn-input-clear" id="clearRecurrenceBtn" title="Clear Input" aria-label="Clear recurrence input">
+                                &times;
+                            </button>
+                        </div>
+                    </div>
 
-        <!-- Presets / Quick Examples -->
-        <div class="preset-section">
-            <div class="preset-title">Click an Example to Auto-Fill:</div>
-            <div class="preset-grid">
-                <div class="preset-card" data-formula="T(n) = T(n-1) + 5" data-base="T(1) = 1" id="preset1">
-                    <span class="preset-formula">T(n) = T(n-1) + 5</span>
-                    <span class="preset-label">Linear Decrement ($\Theta(n)$)</span>
+                    <!-- Base Case Input -->
+                    <div class="form-group-block base-case-group">
+                        <label for="base_case" class="form-input-label">
+                            <span class="label-text">Base Case</span>
+                            <span class="label-example">e.g., T(1) = 1 or T(0) = 0</span>
+                        </label>
+                        <div class="input-container">
+                            <input 
+                                type="text" 
+                                id="base_case" 
+                                name="base_case" 
+                                class="form-text-input" 
+                                placeholder="T(1) = 1" 
+                                value="T(1) = 1"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
                 </div>
 
-                <div class="preset-card" data-formula="T(n) = T(n/2) + 1" data-base="T(1) = 1" id="preset2">
-                    <span class="preset-formula">T(n) = T(n/2) + 1</span>
-                    <span class="preset-label">Binary Search ($\Theta(\log n)$)</span>
-                </div>
+                <!-- Action Buttons -->
+                <div class="solver-action-row">
+                    <button type="submit" class="btn-solve-submit" id="solveSubmitBtn">
+                        <span class="btn-icon">⚡</span>
+                        <span class="btn-text">Solve Step-by-Step</span>
+                        <span class="btn-shortcut-hint">↵ Enter</span>
+                    </button>
 
-                <div class="preset-card" data-formula="T(n) = 2T(n/2) + n" data-base="T(1) = 1" id="preset3">
-                    <span class="preset-formula">T(n) = 2T(n/2) + n</span>
-                    <span class="preset-label">MergeSort ($\Theta(n \log n)$)</span>
+                    <button type="button" class="btn-solver-reset" id="resetSolverBtn">
+                        <span>🔄 Reset</span>
+                    </button>
                 </div>
+            </form>
 
-                <div class="preset-card" data-formula="T(n) = 2T(n-1) + 1" data-base="T(1) = 1" id="preset4">
-                    <span class="preset-formula">T(n) = 2T(n-1) + 1</span>
-                    <span class="preset-label">Tower of Hanoi ($\Theta(2^n)$)</span>
+            <!-- Quick Inline Examples Bar -->
+            <div class="quick-examples-bar">
+                <span class="quick-label">⚡ Popular Recurrences:</span>
+                <div class="quick-chips-wrapper">
+                    <button type="button" class="quick-chip" onclick="quickSolve('T(n) = 2T(n/2) + n', 'T(1) = 1')">
+                        $2T(n/2) + n$ <span class="chip-tag">MergeSort</span>
+                    </button>
+                    <button type="button" class="quick-chip" onclick="quickSolve('T(n) = T(n/2) + 1', 'T(1) = 1')">
+                        $T(n/2) + 1$ <span class="chip-tag">Binary Search</span>
+                    </button>
+                    <button type="button" class="quick-chip" onclick="quickSolve('T(n) = T(n-1) + 5', 'T(1) = 1')">
+                        $T(n-1) + 5$ <span class="chip-tag">Linear</span>
+                    </button>
+                    <button type="button" class="quick-chip" onclick="quickSolve('T(n) = 2T(n-1) + 1', 'T(1) = 1')">
+                        $2T(n-1) + 1$ <span class="chip-tag">Hanoi</span>
+                    </button>
+                    <button type="button" class="quick-chip" onclick="quickSolve('T(n) = T(n-1) + n', 'T(1) = 1')">
+                        $T(n-1) + n$ <span class="chip-tag">Quadratic</span>
+                    </button>
+                    <button type="button" class="quick-chip" onclick="quickSolve('T(n) = 3T(n/2) + n', 'T(1) = 1')">
+                        $3T(n/2) + n$ <span class="chip-tag">D&C</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- Info Cards Section -->
-<section class="info-section">
+<!-- Categorized Examples Section -->
+<section class="examples-catalog-section" id="examplesSection">
     <div class="container">
-        <div class="info-grid">
-            <div class="info-card">
-                <h3>What is a Recurrence Relation?</h3>
-                <p>
-                    A recurrence relation is an equation that defines a sequence recursively, expressing $T(n)$ in terms of smaller input sizes like $T(n-1)$ or $T(n/2)$. They are heavily used to analyze recursive algorithms.
-                </p>
+        <div class="section-title-wrapper">
+            <div class="section-badge">📚 Curated Recurrences</div>
+            <h2 class="section-heading-title">Recurrence Relation Examples</h2>
+            <p class="section-heading-sub">Explore textbook recurrence relations categorized by algorithmic pattern. Click "Try This" to load and solve step-by-step.</p>
+        </div>
+
+        <div class="examples-category-grid">
+            <!-- 1. Basic / Linear Decrement -->
+            <div class="category-block">
+                <div class="category-header">
+                    <span class="category-icon">🌱</span>
+                    <h3 class="category-title">Basic Decrement</h3>
+                </div>
+                <div class="cards-list">
+                    <div class="example-item-card">
+                        <div class="example-card-top">
+                            <span class="example-formula">T(n) = T(n-1) + 1</span>
+                            <span class="example-complexity-tag">$\Theta(n)$</span>
+                        </div>
+                        <p class="example-desc">Simple unit increment per recursive call. Base case: $T(1) = 1$.</p>
+                        <button type="button" class="btn-try-example" onclick="quickSolve('T(n) = T(n-1) + 1', 'T(1) = 1')">
+                            Try This →
+                        </button>
+                    </div>
+
+                    <div class="example-item-card">
+                        <div class="example-card-top">
+                            <span class="example-formula">T(n) = T(n-1) + 5</span>
+                            <span class="example-complexity-tag">$\Theta(n)$</span>
+                        </div>
+                        <p class="example-desc">Constant additive work at each decrement step. Base case: $T(1) = 1$.</p>
+                        <button type="button" class="btn-try-example" onclick="quickSolve('T(n) = T(n-1) + 5', 'T(1) = 1')">
+                            Try This →
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div class="info-card">
-                <h3>How Substitution Method Works</h3>
-                <p>
-                    The substitution method repeatedly expands the recurrence equation step-by-step until a recognizable geometric or algebraic pattern emerges after $k$ steps. Setting $k$ to reach the base case yields the closed-form solution.
-                </p>
+            <!-- 2. Divide and Conquer -->
+            <div class="category-block">
+                <div class="category-header">
+                    <span class="category-icon">✂️</span>
+                    <h3 class="category-title">Divide & Conquer</h3>
+                </div>
+                <div class="cards-list">
+                    <div class="example-item-card">
+                        <div class="example-card-top">
+                            <span class="example-formula">T(n) = T(n/2) + 1</span>
+                            <span class="example-complexity-tag">$\Theta(\log n)$</span>
+                        </div>
+                        <p class="example-desc">Binary Search halving pattern with constant check per iteration.</p>
+                        <button type="button" class="btn-try-example" onclick="quickSolve('T(n) = T(n/2) + 1', 'T(1) = 1')">
+                            Try This →
+                        </button>
+                    </div>
+
+                    <div class="example-item-card">
+                        <div class="example-card-top">
+                            <span class="example-formula">T(n) = 2T(n/2) + n</span>
+                            <span class="example-complexity-tag">$\Theta(n \log n)$</span>
+                        </div>
+                        <p class="example-desc">MergeSort recursive dividing with linear merge cost at each level.</p>
+                        <button type="button" class="btn-try-example" onclick="quickSolve('T(n) = 2T(n/2) + n', 'T(1) = 1')">
+                            Try This →
+                        </button>
+                    </div>
+
+                    <div class="example-item-card">
+                        <div class="example-card-top">
+                            <span class="example-formula">T(n) = 4T(n/2) + n</span>
+                            <span class="example-complexity-tag">$\Theta(n^2)$</span>
+                        </div>
+                        <p class="example-desc">4 subproblems of half size with linear combination work.</p>
+                        <button type="button" class="btn-try-example" onclick="quickSolve('T(n) = 4T(n/2) + n', 'T(1) = 1')">
+                            Try This →
+                        </button>
+                    </div>
+
+                    <div class="example-item-card">
+                        <div class="example-card-top">
+                            <span class="example-formula">T(n) = 3T(n/2) + n</span>
+                            <span class="example-complexity-tag">$\Theta(n^{\log_2 3})$</span>
+                        </div>
+                        <p class="example-desc">Karatsuba integer multiplication branching structure.</p>
+                        <button type="button" class="btn-try-example" onclick="quickSolve('T(n) = 3T(n/2) + n', 'T(1) = 1')">
+                            Try This →
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div class="info-card">
-                <h3>Why Step-by-Step Explanations Matter</h3>
-                <p>
-                    Simply knowing the final Big-$\Theta$ asymptotic bound isn't enough for university exams or deep understanding. Our solver shows every algebraic step so you learn *how* the exact formula is derived.
+            <!-- 3. Linear Growth / Polynomial -->
+            <div class="category-block">
+                <div class="category-header">
+                    <span class="category-icon">📈</span>
+                    <h3 class="category-title">Linear Growth</h3>
+                </div>
+                <div class="cards-list">
+                    <div class="example-item-card">
+                        <div class="example-card-top">
+                            <span class="example-formula">T(n) = T(n-1) + n</span>
+                            <span class="example-complexity-tag">$\Theta(n^2)$</span>
+                        </div>
+                        <p class="example-desc">Selection Sort / Insertion Sort worst-case arithmetic progression.</p>
+                        <button type="button" class="btn-try-example" onclick="quickSolve('T(n) = T(n-1) + n', 'T(1) = 1')">
+                            Try This →
+                        </button>
+                    </div>
+
+                    <div class="example-item-card">
+                        <div class="example-card-top">
+                            <span class="example-formula">T(n) = T(n-2) + 3</span>
+                            <span class="example-complexity-tag">$\Theta(n)$</span>
+                        </div>
+                        <p class="example-desc">Step-2 decrement recurrence unrolled to base case.</p>
+                        <button type="button" class="btn-try-example" onclick="quickSolve('T(n) = T(n-2) + 3', 'T(1) = 1')">
+                            Try This →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Exponential -->
+            <div class="category-block">
+                <div class="category-header">
+                    <span class="category-icon">🚀</span>
+                    <h3 class="category-title">Exponential</h3>
+                </div>
+                <div class="cards-list">
+                    <div class="example-item-card">
+                        <div class="example-card-top">
+                            <span class="example-formula">T(n) = 2T(n-1) + 1</span>
+                            <span class="example-complexity-tag">$\Theta(2^n)$</span>
+                        </div>
+                        <p class="example-desc">Tower of Hanoi puzzle recurrence solved via geometric expansion.</p>
+                        <button type="button" class="btn-try-example" onclick="quickSolve('T(n) = 2T(n-1) + 1', 'T(1) = 1')">
+                            Try This →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works-section" id="howItWorksSection">
+    <div class="container">
+        <div class="section-title-wrapper">
+            <div class="section-badge">💡 Educational Guide</div>
+            <h2 class="section-heading-title">How the Substitution Method Works</h2>
+            <p class="section-heading-sub">The 6 rigorous mathematical steps used to solve recurrence relations without shortcuts.</p>
+        </div>
+
+        <div class="how-steps-grid">
+            <div class="how-step-card">
+                <div class="how-step-number">1</div>
+                <div class="how-step-icon">📝</div>
+                <h3 class="how-step-title">Write the Recurrence</h3>
+                <p class="how-step-desc">
+                    State the original relation $T(n)$ along with the boundary condition $T(n_0) = b_0$.
                 </p>
+                <div class="how-formula-preview">$$T(n) = T(n-1) + 5$$</div>
+            </div>
+
+            <div class="how-step-card">
+                <div class="how-step-number">2</div>
+                <div class="how-step-icon">🔄</div>
+                <h3 class="how-step-title">Substitute Repeatedly</h3>
+                <p class="how-step-desc">
+                    Replace $T(n-1)$ or $T(n/b)$ with its formula for steps 1, 2, and 3 to reveal term growth.
+                </p>
+                <div class="how-formula-preview">$$T(n) = T(n-3) + 15$$</div>
+            </div>
+
+            <div class="how-step-card">
+                <div class="how-step-number">3</div>
+                <div class="how-step-icon">🔍</div>
+                <h3 class="how-step-title">Find the Pattern</h3>
+                <p class="how-step-desc">
+                    Express the equation after an arbitrary $k$ substitutions as a general $k$-th formula.
+                </p>
+                <div class="how-formula-preview">$$T(n) = T(n-k) + 5k$$</div>
+            </div>
+
+            <div class="how-step-card">
+                <div class="how-step-number">4</div>
+                <div class="how-step-icon">🎯</div>
+                <h3 class="how-step-title">Reach Base Case</h3>
+                <p class="how-step-desc">
+                    Set the inner subproblem equal to base index $n_0$ (e.g., $n-k = 1$) to solve for $k$.
+                </p>
+                <div class="how-formula-preview">$$k = n - 1$$</div>
+            </div>
+
+            <div class="how-step-card">
+                <div class="how-step-number">5</div>
+                <div class="how-step-icon">✨</div>
+                <h3 class="how-step-title">Simplify Algebraic Form</h3>
+                <p class="how-step-desc">
+                    Substitute $k$ and the base case value $T(1)$ back into the formula to produce the closed form.
+                </p>
+                <div class="how-formula-preview">$$T(n) = 5n - 4$$</div>
+            </div>
+
+            <div class="how-step-card">
+                <div class="how-step-number">6</div>
+                <div class="how-step-icon">📊</div>
+                <h3 class="how-step-title">Determine Complexity</h3>
+                <p class="how-step-desc">
+                    Identify the highest-order dominant term to formulate the tight asymptotic bound.
+                </p>
+                <div class="how-formula-preview">$$\Theta(n)$$</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Interactive Recurrence Reference Table -->
+<section class="reference-matrix-section">
+    <div class="container">
+        <div class="matrix-container-card">
+            <div class="matrix-card-header">
+                <div>
+                    <h3 class="matrix-card-title">📊 Recurrence Relation Quick Reference</h3>
+                    <p class="matrix-card-subtitle">Common DAA exam and viva recurrences solved via substitution</p>
+                </div>
+            </div>
+
+            <div class="table-scroll-wrapper">
+                <table class="academic-table">
+                    <thead>
+                        <tr>
+                            <th>Recurrence Pattern</th>
+                            <th>Recurrence Equation $T(n)$</th>
+                            <th>Base Case</th>
+                            <th>Exact Closed Form</th>
+                            <th>Tight Bound $\Theta$</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Linear Decrement</strong></td>
+                            <td><code>T(n) = T(n-1) + 5</code></td>
+                            <td>$T(1) = 1$</td>
+                            <td>$5n - 4$</td>
+                            <td><span class="complexity-pill">$\Theta(n)$</span></td>
+                            <td><button type="button" class="btn-table-action" onclick="quickSolve('T(n) = T(n-1) + 5', 'T(1) = 1')">Solve →</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Divide & Conquer (Binary Search)</strong></td>
+                            <td><code>T(n) = T(n/2) + 1</code></td>
+                            <td>$T(1) = 1$</td>
+                            <td>$1 + \log_2 n$</td>
+                            <td><span class="complexity-pill">$\Theta(\log n)$</span></td>
+                            <td><button type="button" class="btn-table-action" onclick="quickSolve('T(n) = T(n/2) + 1', 'T(1) = 1')">Solve →</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Balanced Divide & Conquer (MergeSort)</strong></td>
+                            <td><code>T(n) = 2T(n/2) + n</code></td>
+                            <td>$T(1) = 1$</td>
+                            <td>$n \log_2 n + n$</td>
+                            <td><span class="complexity-pill">$\Theta(n \log n)$</span></td>
+                            <td><button type="button" class="btn-table-action" onclick="quickSolve('T(n) = 2T(n/2) + n', 'T(1) = 1')">Solve →</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Exponential Decrement (Hanoi)</strong></td>
+                            <td><code>T(n) = 2T(n-1) + 1</code></td>
+                            <td>$T(1) = 1$</td>
+                            <td>$2^n - 1$</td>
+                            <td><span class="complexity-pill">$\Theta(2^n)$</span></td>
+                            <td><button type="button" class="btn-table-action" onclick="quickSolve('T(n) = 2T(n-1) + 1', 'T(1) = 1')">Solve →</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Linear Growth Decrement</strong></td>
+                            <td><code>T(n) = T(n-1) + n</code></td>
+                            <td>$T(1) = 1$</td>
+                            <td>$\frac{n(n+1)}{2}$</td>
+                            <td><span class="complexity-pill">$\Theta(n^2)$</span></td>
+                            <td><button type="button" class="btn-table-action" onclick="quickSolve('T(n) = T(n-1) + n', 'T(1) = 1')">Solve →</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Branching Divide & Conquer</strong></td>
+                            <td><code>T(n) = 3T(n/2) + n</code></td>
+                            <td>$T(1) = 1$</td>
+                            <td>$\Theta(n^{\log_2 3})$</td>
+                            <td><span class="complexity-pill">$\Theta(n^{1.585})$</span></td>
+                            <td><button type="button" class="btn-table-action" onclick="quickSolve('T(n) = 3T(n/2) + n', 'T(1) = 1')">Solve →</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

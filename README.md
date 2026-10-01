@@ -1,20 +1,33 @@
-# Recurrence Relation Solver 🧮
+# Recurrence Relation Solver — AI-Powered Substitution Method Tutor 🧮
 
-A complete, responsive web application built with Python Flask, HTML5, CSS3, Vanilla JavaScript, and MathJax to solve recurrence relations step-by-step using the **Substitution Method**.
-
-Built specifically for students learning **Design and Analysis of Algorithms (DAA)**.
+A modern, educational web application built for B.Tech CSE / AIML students studying **Design and Analysis of Algorithms (DAA)** to master solving recurrence relations using the **Step-by-Step Substitution Method**.
 
 ---
 
 ## 🌟 Key Features
 
-- **Step-by-Step Substitution Method:** Shows how equations expand substitution by substitution ($k$-th pattern, base case derivation, exact closed form, and asymptotic $\Theta$ complexity).
-- **Beautiful Mathematical Rendering:** Uses MathJax v3 to render LaTeX equations cleanly.
-- **Interactive Quick Presets:** Click example buttons ($T(n) = T(n-1)+5$, $T(n) = T(n/2)+1$, $T(n) = 2T(n/2)+n$, $T(n) = 2T(n-1)+1$) to auto-fill the form.
-- **Dark / Light Theme:** Seamless toggle with `localStorage` memory.
-- **Educational Context:** Explains asymptotic bounds without making false assumptions about best/average/worst cases for deterministic recurrence relations.
-- **Printable Solution:** Includes `@media print` layout styles and a dedicated Print button.
-- **No External JS Frameworks:** Built cleanly with native HTML5, vanilla CSS3, and JavaScript.
+- **Strict Focus on Substitution Method:** Pure algebraic iterative expansion / unrolling derivations with mathematical accuracy.
+- **Academic Theme:** Warm dark graphite/charcoal study desk theme (`#171717`, `#292722`, `#F5F0E6`, `#D6A84F`) with subtle floating mathematical background particles.
+- **Multi-Form Recurrence Parser & Solver:** Dynamically handles linear decrements ($T(n-1)+c$, $T(n-1)+n$, $T(n-1)+n^2$), arbitrary step decrements ($T(n-k)+c$), exponential decrements ($aT(n-1)+c$), and divide-and-conquer recurrences ($aT(n/b)+c$, $aT(n/b)+f(n)$).
+- **True Step-by-Step Mathematical Derivations:**
+  1. Given Recurrence & Base Case
+  2. First Substitution
+  3. Second / Third Substitution
+  4. General $k$-th Pattern
+  5. Base-Case Condition ($k = n - 1$ or $k = \log_b n$)
+  6. Closed-Form Evaluation
+  7. Big-Theta ($\Theta$) Tight Bound
+- **AI DAA Tutor Assistant:**
+  - Context-aware chatbot that understands the current active recurrence and step derivations.
+  - Answers B.Tech student questions such as *"Why is k = n-1?"*, *"Why did we substitute n-1?"*, and *"Why is the complexity $\Theta(n)$?"*.
+  - Safe backend routing with fallback knowledge base and optional `GEMINI_API_KEY` / `OPENAI_API_KEY` integration.
+- **Categorized Examples & Quick Matrix:**
+  - Basic ($T(n-1)+1$, $T(n-1)+5$)
+  - Divide & Conquer ($T(n/2)+1$, $2T(n/2)+n$, $4T(n/2)+n$, $3T(n/2)+n$)
+  - Linear Growth ($T(n-1)+n$, $T(n-2)+3$)
+  - Exponential ($2T(n-1)+1$)
+- **KaTeX & MathJax Equation Typesetting:** Crystal-clear mathematical notation.
+- **Student Actions:** Copy Equation, Copy Solution, Print Friendly Stylesheet (`@media print`), and keyboard-friendly shortcuts (Enter to solve).
 
 ---
 
@@ -23,28 +36,32 @@ Built specifically for students learning **Design and Analysis of Algorithms (DA
 ```
 recurrence-relation-solver/
 │
-├── app.py                     # Flask application entrypoint & routing
+├── app.py                     # Flask application entrypoint & API routes (/solve, /api/chat, /api/solve)
 ├── requirements.txt           # Dependency specifications
+├── vercel.json                # Vercel serverless deployment config
+├── render.yaml                # Render deployment configuration
 ├── README.md                  # Project documentation
 │
-├── solver/                    # Core mathematical engine
+├── solver/                    # Core Mathematical & AI Tutor Engine
 │   ├── __init__.py
-│   └── substitution.py        # Symbolic parser & substitution solver
+│   ├── substitution.py        # Generalized substitution solver & pattern parser
+│   └── ai_chatbot.py          # Context-aware AI DAA Tutor with knowledge base
 │
-├── templates/                 # Jinja2 HTML5 templates
-│   ├── base.html              # Base layout & MathJax CDN setup
-│   ├── index.html             # Hero section & solver input form
-│   ├── solution.html          # Step-by-step solution breakdown
-│   └── about.html             # Educational guide to recurrences
+├── templates/                 # Jinja2 HTML5 Templates
+│   ├── base.html              # Academic dark layout, canvas, KaTeX CDN & AI Tutor modal
+│   ├── index.html             # Hero, solver card, categorized examples, 6-step guide, matrix table
+│   ├── solution.html          # Step-by-Step solution cards & final result summary
+│   └── about.html             # B.Tech DAA study notes on substitution method
 │
-├── static/                    # Frontend static assets
+├── static/                    # Frontend Static Assets
 │   ├── css/
-│   │   └── style.css          # Theme system & UI styling
+│   │   └── style.css          # Warm academic dark theme, glassmorphism cards & responsive rules
 │   └── js/
-│       └── script.js          # Theme toggle, form validation, presets
+│       └── script.js          # Math canvas animation, preset loaders, KaTeX render, AI tutor client
 │
-└── tests/                     # Test suite
-    └── test_solver.py         # Unit tests for the substitution solver engine
+└── tests/                     # Automated Test Suite
+    ├── test_solver.py         # Unit tests for substitution solver engine
+    └── test_chatbot.py        # Unit tests for AI Tutor and API endpoints
 ```
 
 ---
@@ -52,74 +69,23 @@ recurrence-relation-solver/
 ## 🚀 How to Run Locally
 
 ### 1. Prerequisites
-Ensure you have Python 3.9+ installed.
+Python 3.9 or higher.
 
 ### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run Unit Tests
+### 3. Run Automated Tests
 ```bash
-python -m unittest discover -s tests
+python -m unittest discover tests
 ```
 
 ### 4. Start the Application
 ```bash
 python app.py
 ```
-
-Open your browser and navigate to:
-```
-http://127.0.0.1:5000
-```
-
----
-
-## 💡 Supported Recurrence Types
-
-1. **Linear Decrement Additive:**
-   - Format: $T(n) = T(n-1) + c$
-   - Example: `T(n) = T(n-1) + 5` $\implies \Theta(n)$
-
-2. **Exponential Decrement Multiplicative:**
-   - Format: $T(n) = a T(n-1) + c$
-   - Example: `T(n) = 2T(n-1) + 1` $\implies \Theta(2^n)$
-
-3. **Logarithmic Divide-and-Conquer:**
-   - Format: $T(n) = T(n/b) + c$
-   - Example: `T(n) = T(n/2) + 1` $\implies \Theta(\log n)$
-
-4. **Linear Divide-and-Conquer (MergeSort Type):**
-   - Format: $T(n) = a T(n/b) + c n$
-   - Example: `T(n) = 2T(n/2) + n` $\implies \Theta(n \log n)$
-
-5. **Branching Constant Divide-and-Conquer:**
-   - Format: $T(n) = a T(n/b) + c$
-   - Example: `T(n) = 2T(n/2) + 1` $\implies \Theta(n)$
-
----
-
-## 📖 How the Substitution Method Works
-
-Given $T(n) = T(n-1) + 5$ with $T(1) = 1$:
-
-1. **Given:** $T(n) = T(n-1) + 5$
-2. **First substitution:** $T(n-1) = T(n-2) + 5 \implies T(n) = T(n-2) + 10$
-3. **Second substitution:** $T(n) = T(n-3) + 15$
-4. **General pattern ($k$-th step):** $T(n) = T(n-k) + 5k$
-5. **Reach base case:** $n - k = 1 \implies k = n - 1$
-6. **Substitute $k$:** $T(n) = T(1) + 5(n-1)$
-7. **Apply base case:** $T(n) = 1 + 5(n-1) = 5n - 4$
-8. **Final Complexity:** $\Theta(n)$
-
----
-
-## 🚀 Future Enhancements
-
-- Support for Master Theorem & Recursion Tree visualizer diagrams.
-- Extended support for non-linear non-recursive functions $f(n) = n^2, \log n$.
-- Interactive step step-through slider animation.
+Open your browser at `http://127.0.0.1:5000`.
 
 ---
 

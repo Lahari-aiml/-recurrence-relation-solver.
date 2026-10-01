@@ -1,72 +1,170 @@
 {% extends "base.html" %}
 
-{% block title %}About - Recurrence Relation Solver{% endblock %}
+{% block title %}About Substitution Method — Recurrence Relation Solver{% endblock %}
 
 {% block content %}
-<section class="hero" style="padding: 3rem 1.5rem 4rem 1.5rem;">
-    <div class="hero-content">
-        <h1 class="hero-title">About Recurrence Relations</h1>
-        <p class="hero-subtitle">
-            A comprehensive guide to understanding substitution methods, recursive algorithm analysis, and asymptotic notation.
-        </p>
-    </div>
-</section>
-
-<div class="container" style="margin-top: -2rem; margin-bottom: 4rem;">
-    <div class="card" style="margin-bottom: 2rem;">
-        <h2 class="card-title" style="color: var(--primary-color);">What is a Recurrence Relation?</h2>
-        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-            In computer science and mathematics, a <strong>recurrence relation</strong> is an equation that defines a function $T(n)$ in terms of its value on smaller inputs (such as $T(n-1)$ or $T(n/2)$).
-        </p>
-        <p style="color: var(--text-secondary);">
-            Recurrence relations are the primary mathematical tool used in <strong>Design and Analysis of Algorithms (DAA)</strong> to measure the time complexity of recursive algorithms like MergeSort, QuickSort, Binary Search, and Tower of Hanoi.
+<div class="container about-page-container">
+    <!-- About Hero Banner -->
+    <div class="about-hero-banner">
+        <div class="hero-badge">
+            <span class="badge-icon">🎓</span>
+            <span class="badge-text">DAA Study Notes & Concepts</span>
+        </div>
+        <h1 class="about-page-title">The Substitution Method for Recurrence Relations</h1>
+        <p class="about-page-subtitle">
+            A comprehensive academic guide to iterative expansion, algebraic unrolling, base-case evaluation, and asymptotic complexity analysis for B.Tech CSE/AIML students.
         </p>
     </div>
 
-    <div class="card" style="margin-bottom: 2rem;">
-        <h2 class="card-title" style="color: var(--primary-color);">Why are Recurrence Relations Important?</h2>
-        <ul style="padding-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
-            <li><strong>Predict Performance:</strong> They allow engineers to analyze how execution time scales as input size $n$ grows to millions or billions of items.</li>
-            <li><strong>Compare Algorithms:</strong> They help compare different algorithmic paradigms (e.g., $O(n^2)$ Bubble Sort vs $O(n \log n)$ MergeSort).</li>
-            <li><strong>University Curriculum:</strong> Mastering recurrence solving is a core component of undergraduate computer science degrees (B.Tech / B.E. / B.Sc CS).</li>
-        </ul>
-    </div>
-
-    <div class="card" style="margin-bottom: 2rem;">
-        <h2 class="card-title" style="color: var(--primary-color);">What is the Substitution Method?</h2>
-        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-            The <strong>Substitution Method</strong> (also called the Iterative Method or Unrolling Method) works by repeatedly replacing the recursive term $T(\dots)$ with its definition until a pattern emerges after $k$ steps.
-        </p>
-        
-        <div class="equation-box" style="margin: 1.25rem 0;">
-            $$\text{Step 1: } T(n) = T(n-1) + c$$
-            $$\text{Step 2: } T(n) = T(n-2) + 2c$$
-            $$\text{Step 3: } T(n) = T(n-3) + 3c$$
-            $$\text{General Pattern: } T(n) = T(n-k) + kc$$
+    <!-- Educational Content Grid -->
+    <div class="about-content-stack">
+        <!-- 1. What is a Recurrence Relation? -->
+        <div class="academic-note-card">
+            <div class="note-card-header">
+                <span class="note-card-icon">📖</span>
+                <h2 class="note-card-title">1. What is a Recurrence Relation?</h2>
+            </div>
+            <div class="note-card-body">
+                <p>
+                    In computer science and algorithm design, a <strong>recurrence relation</strong> is an equation or inequality that defines a function $T(n)$ in terms of its value on smaller inputs.
+                </p>
+                <div class="math-callout-box">
+                    $$T(n) = a \cdot T\left(\frac{n}{b}\right) + f(n) \quad \text{or} \quad T(n) = a \cdot T(n-k) + f(n)$$
+                </div>
+                <p>
+                    Recurrence relations are used in <strong>Design and Analysis of Algorithms (DAA)</strong> to mathematically model the execution time and resource complexity of recursive algorithms like MergeSort ($2T(n/2) + n$), Binary Search ($T(n/2) + 1$), and Tower of Hanoi ($2T(n-1) + 1$).
+                </p>
+            </div>
         </div>
 
-        <p style="color: var(--text-secondary);">
-            Once the general pattern is expressed in terms of $k$, we set $n-k = 1$ (or the base case argument) to find $k = n-1$. Substituting $k$ back into the formula yields the exact closed-form solution $T(n) = c \cdot n + O(1)$.
-        </p>
-    </div>
+        <!-- 2. What is the Substitution Method? -->
+        <div class="academic-note-card" id="unrollingSteps">
+            <div class="note-card-header">
+                <span class="note-card-icon">⚡</span>
+                <h2 class="note-card-title">2. The Substitution (Iterative Expansion) Method</h2>
+            </div>
+            <div class="note-card-body">
+                <p>
+                    The <strong>Substitution Method</strong> (also known as the <em>Method of Iteration</em> or <em>Unrolling</em>) is a fundamental technique where we repeatedly replace the recursive call $T(\cdot)$ with its algebraic definition until a clear mathematical pattern emerges after $k$ steps.
+                </p>
+                
+                <div class="substitution-steps-breakdown">
+                    <div class="sub-step-item">
+                        <span class="sub-step-num">Step 1</span>
+                        <div class="sub-step-content">
+                            <h4>Repeated Algebraic Expansion</h4>
+                            <p>Substitute $T(n-1)$ or $T(n/b)$ into the original equation for steps 1, 2, and 3 without prematurely multiplying terms together so patterns remain visible.</p>
+                            <div class="math-callout-box">
+                                $$T(n) = 2T(n/2) + n = 2[2T(n/4) + n/2] + n = 4T(n/4) + 2n$$
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="card" style="margin-bottom: 2rem;">
-        <h2 class="card-title" style="color: var(--primary-color);">When to Use the Substitution Method?</h2>
-        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-            Students should use the Substitution Method when:
-        </p>
-        <ul style="padding-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
-            <li>The recurrence does not fit standard Master Theorem rules (e.g., decrement recurrences like $T(n) = T(n-1) + n$).</li>
-            <li>You need the exact closed-form equation (e.g. $T(n) = 5n - 4$) rather than just an upper bound.</li>
-            <li>Your university examination explicitly requires step-by-step unrolling derivations.</li>
-        </ul>
-    </div>
+                    <div class="sub-step-item">
+                        <span class="sub-step-num">Step 2</span>
+                        <div class="sub-step-content">
+                            <h4>Identify the General $k$-th Pattern</h4>
+                            <p>Formulate an equation expressing $T(n)$ in terms of an arbitrary parameter $k$:</p>
+                            <div class="math-callout-box">
+                                $$T(n) = 2^k T\left(\frac{n}{2^k}\right) + k \cdot n$$
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="final-answer-card" style="background: var(--primary-light); border-color: var(--primary-color);">
-        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">🎓 Built for DAA Students</h3>
-        <p style="color: var(--text-primary);">
-            This tool was designed specifically for students taking <strong>Design and Analysis of Algorithms</strong> courses to make learning recursive complexity intuitive, clear, and interactive.
-        </p>
+                    <div class="sub-step-item" id="baseCaseSignificance">
+                        <span class="sub-step-num">Step 3</span>
+                        <div class="sub-step-content">
+                            <h4>Reach the Base Case & Solve for $k$</h4>
+                            <p>Equate the inner subproblem to the base case value $n_0$ (typically $1$ or $0$):</p>
+                            <div class="math-callout-box">
+                                $$\frac{n}{2^k} = 1 \implies 2^k = n \implies k = \log_2 n$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sub-step-item" id="asymptoticBound">
+                        <span class="sub-step-num">Step 4</span>
+                        <div class="sub-step-content">
+                            <h4>Substitute $k$ & Evaluate Closed Form</h4>
+                            <p>Replace $k$ and $T(1)$ into the general formula to obtain the exact analytical function and extract the dominant term:</p>
+                            <div class="math-callout-box">
+                                $$T(n) = n \cdot T(1) + n \log_2 n = n \log_2 n + n = \Theta(n \log n)$$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Why Use the Substitution Method? -->
+        <div class="academic-note-card">
+            <div class="note-card-header">
+                <span class="note-card-icon">💡</span>
+                <h2 class="note-card-title">3. Advantages of the Substitution Method</h2>
+            </div>
+            <div class="note-card-body">
+                <ul class="academic-bullet-list">
+                    <li><strong>Provides Exact Closed-Form Equations:</strong> Unlike generic upper-bound formulas, substitution yields the exact function $T(n)$ with all constant multipliers and lower-order terms.</li>
+                    <li><strong>Solves Decrement Recurrences:</strong> Decrement recurrences like $T(n) = T(n-1) + n$ or $T(n) = 2T(n-1) + 1$ cannot be solved by the standard Master Theorem, but are straightforward with substitution.</li>
+                    <li><strong>Deep Mathematical Understanding:</strong> Unrolling reveals how work is distributed across recursion levels, giving students clear intuition for algorithm design.</li>
+                    <li><strong>Exam & Viva Essential:</strong> University exam questions in B.Tech DAA specifically request step-by-step unrolling derivations.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 4. Common Recurrences Quick Summary -->
+        <div class="academic-note-card">
+            <div class="note-card-header">
+                <span class="note-card-icon">📊</span>
+                <h2 class="note-card-title">4. Classic Recurrence Reference Summary</h2>
+            </div>
+            <div class="note-card-body">
+                <div class="table-scroll-wrapper">
+                    <table class="academic-table">
+                        <thead>
+                            <tr>
+                                <th>Algorithm / Problem</th>
+                                <th>Recurrence Relation</th>
+                                <th>Exact Formula $T(n)$</th>
+                                <th>Tight Bound $\Theta$</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Binary Search</strong></td>
+                                <td>$T(n) = T(n/2) + 1$</td>
+                                <td>$1 + \log_2 n$</td>
+                                <td>$\Theta(\log n)$</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MergeSort</strong></td>
+                                <td>$T(n) = 2T(n/2) + n$</td>
+                                <td>$n \log_2 n + n$</td>
+                                <td>$\Theta(n \log n)$</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tower of Hanoi</strong></td>
+                                <td>$T(n) = 2T(n-1) + 1$</td>
+                                <td>$2^n - 1$</td>
+                                <td>$\Theta(2^n)$</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Insertion / Selection Sort</strong></td>
+                                <td>$T(n) = T(n-1) + n$</td>
+                                <td>$\frac{n(n+1)}{2}$</td>
+                                <td>$\Theta(n^2)$</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Linear Scan / Decrement</strong></td>
+                                <td>$T(n) = T(n-1) + 5$</td>
+                                <td>$5n - 4$</td>
+                                <td>$\Theta(n)$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 
-# Ensure project root is in path
+# Ensure project root is in python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from solver.substitution import solve_recurrence, parse_base_case, parse_recurrence
@@ -10,12 +10,17 @@ from solver.substitution import solve_recurrence, parse_base_case, parse_recurre
 
 class TestSubstitutionSolver(unittest.TestCase):
 
-    def test_decrement_additive(self):
+    def test_decrement_additive_5(self):
         result = solve_recurrence("T(n) = T(n-1) + 5", "T(1) = 1")
         self.assertTrue(result["supported"])
         self.assertEqual(result["complexity"], "Θ(n)")
         self.assertIn("5n - 4", result["exact_solution"])
         self.assertGreaterEqual(len(result["steps"]), 6)
+
+    def test_decrement_additive_1(self):
+        result = solve_recurrence("T(n) = T(n-1) + 1", "T(1) = 1")
+        self.assertTrue(result["supported"])
+        self.assertEqual(result["complexity"], "Θ(n)")
 
     def test_divide_and_conquer_logarithmic(self):
         result = solve_recurrence("T(n) = T(n/2) + 1", "T(1) = 1")
@@ -35,6 +40,21 @@ class TestSubstitutionSolver(unittest.TestCase):
         self.assertTrue(result["supported"])
         self.assertEqual(result["complexity"], "Θ(2^n)")
         self.assertIn("2^n - 1", result["exact_solution"])
+
+    def test_linear_growth_decrement(self):
+        result = solve_recurrence("T(n) = T(n-1) + n", "T(1) = 1")
+        self.assertTrue(result["supported"])
+        self.assertEqual(result["complexity"], "Θ(n²)")
+
+    def test_branching_divide_3(self):
+        result = solve_recurrence("T(n) = 3T(n/2) + n", "T(1) = 1")
+        self.assertTrue(result["supported"])
+        self.assertIn(r"\log_{2} 3", result["complexity_latex"])
+
+    def test_step_k_decrement(self):
+        result = solve_recurrence("T(n) = T(n-2) + 3", "T(1) = 1")
+        self.assertTrue(result["supported"])
+        self.assertEqual(result["complexity"], "Θ(n)")
 
     def test_invalid_and_unsupported(self):
         res1 = solve_recurrence("", "T(1) = 1")

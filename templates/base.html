@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Step-by-step Recurrence Relation Solver using the Substitution Method for Design and Analysis of Algorithms (DAA).">
-    <title>{% block title %}Recurrence Relation Solver{% endblock %}</title>
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="description" content="Master Recurrence Relations with the Step-by-Step Substitution Method. Designed for B.Tech CSE/AIML students studying Design and Analysis of Algorithms (DAA).">
+    <meta name="keywords" content="Recurrence Relation Solver, Substitution Method, DAA, Design and Analysis of Algorithms, Time Complexity, Big Theta, Iterative Method">
+    <meta name="author" content="DAA Project">
+    <title>{% block title %}Recurrence Relation Solver — Step-by-Step Substitution Method{% endblock %}</title>
 
-    <!-- MathJax v3 configuration for typesetting LaTeX equations -->
+    <!-- Google Fonts: Outfit (headings & UI) and Fira Code / JetBrains Mono (equations & code) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- KaTeX for fast, beautiful mathematical equation rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <!-- MathJax as complementary fallback if needed -->
     <script>
         window.MathJax = {
             tex: {
@@ -24,48 +33,200 @@
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom Theme Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar" id="topNavbar">
+<body class="academic-dark-theme">
+    <!-- Subtle Animated Mathematical Background Canvas -->
+    <canvas id="mathCanvas" class="math-background-canvas" aria-hidden="true"></canvas>
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar-header" id="topNavbar">
         <div class="nav-container">
             <a href="{{ url_for('index') }}" class="nav-brand" id="navBrand">
-                <div class="brand-icon">f(n)</div>
-                <span>Recurrence Solver</span>
+                <div class="brand-badge-math">
+                    <span class="math-symbol">T(n)</span>
+                </div>
+                <div class="brand-text-group">
+                    <span class="brand-title">Recurrence Solver</span>
+                    <span class="brand-subtitle">Substitution Method</span>
+                </div>
             </a>
 
             <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation Menu">
-                ☰
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
             </button>
 
-            <ul class="nav-links" id="navLinks">
-                <li><a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" id="navHome">Home</a></li>
-                <li><a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}" id="navAbout">About</a></li>
-                <li>
-                    <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Dark/Light Mode">
-                        <span id="themeIcon">🌙</span>
-                        <span id="themeText">Dark Mode</span>
-                    </button>
-                </li>
-            </ul>
+            <nav class="nav-links-wrapper" id="navLinks">
+                <ul class="nav-links">
+                    <li>
+                        <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" id="navHome">
+                            <span class="nav-icon">⚡</span> Solver
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('index') }}#examplesSection" class="nav-link" id="navExamples">
+                            <span class="nav-icon">📚</span> Examples
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('index') }}#howItWorksSection" class="nav-link" id="navHowItWorks">
+                            <span class="nav-icon">💡</span> How It Works
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}" id="navAbout">
+                            <span class="nav-icon">🎓</span> DAA Notes
+                        </a>
+                    </li>
+                    <li>
+                        <button type="button" class="btn-nav-tutor" id="navAITutorBtn">
+                            <span class="tutor-icon">🤖</span> AI DAA Tutor
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content Container -->
-    <main class="main-content">
+    <!-- Main Content Area -->
+    <main class="main-content" id="mainContent">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-brand">Recurrence Relation Solver</div>
-            <div class="footer-tagline">Learn • Substitute • Understand</div>
-            <div class="footer-copy">Built for students learning Design and Analysis of Algorithms (DAA).</div>
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand-col">
+                    <div class="footer-brand">
+                        <span class="footer-math-symbol">T(n)</span>
+                        <span>Recurrence Relation Solver</span>
+                    </div>
+                    <p class="footer-desc">
+                        An educational platform dedicated to mastering the <strong>Step-by-Step Substitution Method</strong> for Design and Analysis of Algorithms (DAA).
+                    </p>
+                    <div class="footer-badge">
+                        <span>🎓 Built for B.Tech CSE & AIML Students</span>
+                    </div>
+                </div>
+
+                <div class="footer-nav-col">
+                    <h4 class="footer-heading">Supported Recurrences</h4>
+                    <ul class="footer-links">
+                        <li><a href="javascript:void(0)" onclick="quickSolve('T(n) = T(n-1) + 5', 'T(1) = 1')">Linear Decrement: $T(n-1) + c$</a></li>
+                        <li><a href="javascript:void(0)" onclick="quickSolve('T(n) = T(n/2) + 1', 'T(1) = 1')">Binary Search: $T(n/2) + 1$</a></li>
+                        <li><a href="javascript:void(0)" onclick="quickSolve('T(n) = 2T(n/2) + n', 'T(1) = 1')">MergeSort: $2T(n/2) + n$</a></li>
+                        <li><a href="javascript:void(0)" onclick="quickSolve('T(n) = 2T(n-1) + 1', 'T(1) = 1')">Tower of Hanoi: $2T(n-1) + 1$</a></li>
+                        <li><a href="javascript:void(0)" onclick="quickSolve('T(n) = T(n-1) + n', 'T(1) = 1')">Linear Growth: $T(n-1) + n$</a></li>
+                        <li><a href="javascript:void(0)" onclick="quickSolve('T(n) = 3T(n/2) + n', 'T(1) = 1')">Divide & Conquer: $3T(n/2) + n$</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-nav-col">
+                    <h4 class="footer-heading">DAA Study Guides</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('about') }}">Substitution Method Guide</a></li>
+                        <li><a href="{{ url_for('about') }}#unrollingSteps">Repeated Expansion Rules</a></li>
+                        <li><a href="{{ url_for('about') }}#baseCaseSignificance">Base Case Evaluation</a></li>
+                        <li><a href="{{ url_for('about') }}#asymptoticBound">Big-Theta ($\Theta$) Tight Bounds</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-copy">
+                    &copy; Recurrence Relation Solver — AI-Powered Substitution Method Tutor
+                </div>
+                <div class="footer-tagline">
+                    Learn • Unroll • Substitute • Master DAA
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- Custom JavaScript -->
+    <!-- Global Floating AI Tutor Trigger & Slide-out Modal -->
+    <div class="floating-ai-tutor-wrapper" id="floatingTutorWidget">
+        <button type="button" class="btn-floating-tutor" id="floatingTutorToggleBtn" aria-label="Open AI DAA Tutor">
+            <span class="tutor-pulse-ring"></span>
+            <span class="tutor-btn-icon">🤖</span>
+            <span class="tutor-btn-text">AI Tutor</span>
+        </button>
+
+        <div class="ai-tutor-panel" id="aiTutorPanel" aria-hidden="true">
+            <div class="tutor-panel-header">
+                <div class="tutor-header-title-group">
+                    <div class="tutor-avatar-badge">🤖</div>
+                    <div>
+                        <h3 class="tutor-header-title">Recurrence AI Tutor</h3>
+                        <p class="tutor-header-subtitle">Ask me anything about your recurrence</p>
+                    </div>
+                </div>
+                <button type="button" class="tutor-close-btn" id="closeTutorPanelBtn" aria-label="Close AI Tutor">&times;</button>
+            </div>
+
+            <!-- Active Problem Context Chip in AI Tutor -->
+            <div class="tutor-context-banner" id="tutorContextBanner" style="display: none;">
+                <span class="context-label">Current Problem:</span>
+                <span class="context-formula" id="tutorContextFormula">T(n) = ...</span>
+                <span class="context-badge" id="tutorContextComplexity">$\Theta(\dots)$</span>
+            </div>
+
+            <!-- Quick Suggestion Chips -->
+            <div class="tutor-suggestion-chips" id="tutorSuggestionChips">
+                <button type="button" class="tutor-chip" data-question="Why did we substitute n-1?">💡 Why substitute n-1?</button>
+                <button type="button" class="tutor-chip" data-question="How did we get k = n-1?">🎯 How to get k?</button>
+                <button type="button" class="tutor-chip" data-question="Why is the answer Θ(n)?">📊 Why is it Θ(n)?</button>
+                <button type="button" class="tutor-chip" data-question="Explain this recurrence simply.">📖 Explain simply</button>
+                <button type="button" class="tutor-chip" data-question="What is the base case?">🛑 What is base case?</button>
+                <button type="button" class="tutor-chip" data-question="What does Big-Theta mean?">📐 What is Big-Theta?</button>
+            </div>
+
+            <!-- Message Scroll Area -->
+            <div class="tutor-chat-messages" id="tutorChatMessages">
+                <div class="chat-bubble tutor-bubble">
+                    <div class="bubble-avatar">🤖</div>
+                    <div class="bubble-body">
+                        <div class="bubble-author">AI DAA Tutor</div>
+                        <div class="bubble-text">
+                            Hello! 👋 I am your <strong>Recurrence AI Tutor</strong>.
+                            <br><br>
+                            I specialize in the <strong>Substitution Method</strong> for Design & Analysis of Algorithms. Ask me to explain any step, derive $k$, clarify base cases, or solve any recurrence relation!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="tutor-typing-indicator" id="tutorTypingIndicator" style="display: none;">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-text">AI Tutor is thinking...</span>
+            </div>
+
+            <!-- Input Form -->
+            <form class="tutor-input-form" id="tutorInputForm">
+                <input 
+                    type="text" 
+                    id="tutorInputText" 
+                    class="tutor-input-field" 
+                    placeholder="Ask about steps, k, base case, or T(n)..." 
+                    autocomplete="off"
+                    required
+                >
+                <button type="submit" class="tutor-submit-btn" id="tutorSendBtn" aria-label="Send Question">
+                    <span>Send</span>
+                    <span class="send-arrow">➤</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Client Scripts -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
