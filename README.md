@@ -1,6 +1,6 @@
-# Recurrence Relation Solver — AI-Powered Substitution Method Tutor 🧮
+# Recurrence Relation Solver Web App — Step by Step Substitution Method Solution Display 🧮
 
-A modern, educational web application built for B.Tech CSE / AIML students studying **Design and Analysis of Algorithms (DAA)** to master solving recurrence relations using the **Step-by-Step Substitution Method**.
+A clean, human-crafted educational web application built for B.Tech CSE / AIML students studying **Design and Analysis of Algorithms (DAA)** to solve and understand recurrence relations step-by-step using the **Substitution (Iterative Expansion) Method**.
 
 ---
 
