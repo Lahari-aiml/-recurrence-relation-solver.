@@ -131,5 +131,43 @@ class TestSubstitutionSolver(unittest.TestCase):
         self.assertEqual(parse_base_case(""), (1, 1, False))
 
 
+class TestSolveEndpointAndEditQuestion(unittest.TestCase):
+
+    def setUp(self):
+        from app import app
+        self.client = app.test_client()
+        self.client.testing = True
+
+    def test_edit_question_button_appears_for_every_recurrence(self):
+        test_recurrences = [
+            ("T(n) = 3T(n/2) + n", "T(1) = 1"),
+            ("T(n) = 2T(n/2) + n", "T(1) = 1"),
+            ("T(n) = T(n-1) + 1", "T(1) = 1"),
+            ("T(n) = T(n/2) + 1", "T(1) = 1"),
+            ("T(n) = 2T(n/3) + n", "T(1) = 1"),
+        ]
+
+        for rec, base in test_recurrences:
+            with self.subTest(rec=rec, base=base):
+                response = self.client.post("/solve", data={
+                    "recurrence": rec,
+                    "base_case": base
+                })
+                self.assertEqual(response.status_code, 200)
+                html = response.get_data(as_text=True)
+
+                # 1. Edit Question button must be generated dynamically
+                self.assertIn("Edit Question", html)
+                self.assertIn("editQuestionBtn", html)
+                self.assertIn("btn-edit-question", html)
+
+                # 2. Form for editing must exist with prefilled recurrence & base case
+                self.assertIn("problemEditForm", html)
+                self.assertIn("editRecurrenceInput", html)
+                self.assertIn("editBaseCaseInput", html)
+                self.assertIn("Save / Solve", html)
+                self.assertIn("Cancel", html)
+
+
 if __name__ == "__main__":
     unittest.main()

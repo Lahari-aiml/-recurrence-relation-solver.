@@ -399,6 +399,42 @@ function initSolutionActions() {
             openTutorWithCurrentContext();
         });
     }
+
+    const editForm = document.getElementById('problemEditForm');
+    if (editForm) {
+        editForm.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                toggleEditQuestion(false);
+            }
+        });
+    }
+}
+
+/**
+ * Toggle Inline Edit Question Form in Solution View
+ */
+function toggleEditQuestion(showEdit) {
+    const viewContainer = document.getElementById('problemSummaryView');
+    const editForm = document.getElementById('problemEditForm');
+    const editBtn = document.getElementById('editQuestionBtn');
+    const recInput = document.getElementById('editRecurrenceInput');
+
+    if (showEdit) {
+        if (viewContainer) viewContainer.style.display = 'none';
+        if (editForm) {
+            editForm.style.display = 'block';
+            if (recInput) {
+                recInput.focus();
+                const len = recInput.value.length;
+                recInput.setSelectionRange(len, len);
+            }
+        }
+        if (editBtn) editBtn.style.display = 'none';
+    } else {
+        if (viewContainer) viewContainer.style.display = 'block';
+        if (editForm) editForm.style.display = 'none';
+        if (editBtn) editBtn.style.display = 'inline-flex';
+    }
 }
 
 /**
