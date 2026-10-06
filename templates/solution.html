@@ -29,7 +29,7 @@
     </div>
 
     {% if not solution.supported %}
-    <!-- Unsupported Alert Card -->
+    <!-- Unsupported / Outside Patterns Alert Card -->
     <div class="solver-card unsupported-card">
         <div class="alert-box alert-error">
             <div class="alert-icon">⚠️</div>
@@ -69,6 +69,12 @@
         "exact_solution": {{ solution.exact_solution | tojson }},
         "complexity": {{ solution.complexity | tojson }},
         "complexity_latex": {{ solution.complexity_latex | tojson }},
+        "num_levels": {{ solution.num_levels | tojson }},
+        "big_o": {{ solution.big_o | tojson }},
+        "big_theta": {{ solution.big_theta | tojson }},
+        "big_omega": {{ solution.big_omega | tojson }},
+        "complexity_explanation": {{ solution.complexity_explanation | tojson }},
+        "steps": {{ solution.steps | tojson }},
         "method": {{ solution.method | tojson }}
     }
     </script>
@@ -92,6 +98,13 @@
             <span class="summary-value-highlight">{{ solution.method }}</span>
         </div>
     </div>
+
+    {% if solution.base_case_assumed %}
+    <div class="alert-box alert-info" style="margin-bottom: 1.5rem; background: rgba(214, 168, 79, 0.08); border: 1px solid var(--accent-gold-border); border-radius: var(--radius-md); padding: 0.9rem 1.25rem; display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 1.25rem;">ℹ️</span>
+        <span style="font-size: 0.92rem; color: var(--text-secondary);"><strong>Note:</strong> {{ solution.base_case_note }}</span>
+    </div>
+    {% endif %}
 
     <!-- Step Progress Indicator -->
     <div class="steps-progress-bar">
@@ -141,8 +154,8 @@
         <div class="final-result-header">
             <div class="final-badge-icon">✨</div>
             <div>
-                <h2 class="final-result-title">Final Solution Result</h2>
-                <p class="final-result-subtitle">Exact closed-form function and tight asymptotic time complexity</p>
+                <h2 class="final-result-title">Final Time Complexity & Solution</h2>
+                <p class="final-result-subtitle">Exact closed-form function, substitution levels, and asymptotic bounds</p>
             </div>
         </div>
 
@@ -153,17 +166,33 @@
             </div>
 
             <div class="final-result-block highlight-block">
-                <div class="result-block-label">Tight Asymptotic Bound ($\Theta$)</div>
+                <div class="result-block-label">Tight Bound ($\Theta$)</div>
                 <div class="result-block-value complexity-large">$${{ solution.complexity_latex }}$$</div>
             </div>
 
             <div class="final-result-block">
-                <div class="result-block-label">Applied Method</div>
-                <div class="result-block-value">{{ solution.method }}</div>
+                <div class="result-block-label">Number of Levels ($k$)</div>
+                <div class="result-block-value math-text">$${{ solution.num_levels }}$$</div>
+            </div>
+
+            <div class="final-result-block">
+                <div class="result-block-label">Asymptotic Bounds</div>
+                <div class="result-block-value math-text">
+                    ${{ solution.big_o }}$, ${{ solution.big_theta }}$, ${{ solution.big_omega }}$
+                </div>
             </div>
         </div>
 
-        <div class="final-result-footer">
+        <!-- Detailed Complexity Explanation Box -->
+        <div class="step-explanation-box" style="margin-top: 1.5rem; background: var(--bg-surface-2); border-left: 3px solid var(--accent-gold); padding: 1.2rem 1.5rem; border-radius: var(--radius-sm);">
+            <div class="explanation-icon">📊</div>
+            <div class="explanation-text">
+                <strong>Why this complexity is obtained:</strong><br>
+                {{ solution.complexity_explanation | safe }}
+            </div>
+        </div>
+
+        <div class="final-result-footer" style="margin-top: 1.5rem;">
             <div class="final-footer-actions">
                 <a href="{{ url_for('index') }}" class="btn-hero-primary">
                     <span>⚡ Solve Another Recurrence</span>
@@ -175,11 +204,11 @@
         </div>
     </div>
 
-    <!-- Complexity Theory Note -->
+    <!-- Mathematical Theory Note -->
     <div class="theory-note-card">
-        <h4 class="theory-note-title">🎓 Mathematical & DAA Note</h4>
+        <h4 class="theory-note-title">🎓 Substitution Method Principles</h4>
         <p>
-            Recurrence relations describe the running time $T(n)$ directly as a deterministic mathematical function of the input size $n$. In algorithm design, using the Substitution Method produces the exact closed form through repeated algebraic unrolling and base-case reduction, establishing a rigorous tight bound of <strong>${{ solution.complexity_latex }}$</strong>.
+            In the <strong>Substitution Method</strong>, the recurrence relation is repeatedly expanded to uncover the mathematical pattern. Finding the stopping condition determines the exact recursion depth $k$. Substituting $k$ and evaluating the work across all levels yields the closed form and proves the tight bound <strong>${{ solution.complexity_latex }}$</strong>.
         </p>
     </div>
 

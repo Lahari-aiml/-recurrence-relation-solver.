@@ -83,14 +83,15 @@ def solve():
         # Prevent stack trace leakage to frontend
         solution_data = {
             "supported": False,
-            "error_message": "An unexpected error occurred while parsing. Please check your syntax.",
+            "error_message": "Please enter a valid recurrence relation.",
             "suggested_examples": [
-                "T(n) = T(n-1) + 5",
-                "T(n) = T(n/2) + 1",
                 "T(n) = 2T(n/2) + n",
-                "T(n) = 2T(n-1) + 1",
+                "T(n) = T(n-1) + 1",
                 "T(n) = T(n-1) + n",
-                "T(n) = 3T(n/2) + n"
+                "T(n) = T(n/2) + 1",
+                "T(n) = 3T(n/2) + n",
+                "T(n) = 2T(n/3) + n",
+                "T(n) = 2T(n/2) + n log n"
             ]
         }
 

@@ -570,7 +570,7 @@ function appendTutorMessage(containerEl, sender, text, meta = null) {
     bubble.className = `chat-bubble ${sender === 'user' ? 'user-bubble' : 'tutor-bubble'}`;
 
     const avatar = sender === 'user' ? '👤' : '🤖';
-    const author = sender === 'user' ? 'You' : 'AI DAA Tutor';
+    const author = sender === 'user' ? 'You' : 'Recurrence AI Tutor';
     const formattedHtml = formatChatMarkdown(text);
 
     let solveActionHtml = '';
