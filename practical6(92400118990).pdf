@@ -1,0 +1,135 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOvLw/gBtXh+egU/v7+YQzE",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Lahari-aiml/-recurrence-relation-solver./blob/main/practical6(92400118990).pdf\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "###Aim:Solve a constraint satisfaction problem such as map coloring,\n",
+        "###Sudoku or N-Queens using backtracking and consistency checking."
+      ],
+      "metadata": {
+        "id": "z6SnHKeLIr26"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "map_data={\n",
+        "    \"A\":[\"B\",\"C\"],\n",
+        "    \"B\":[\"A\",\"C\",\"D\"],\n",
+        "    \"C\":[\"A\",\"B\",\"D\"],\n",
+        "    \"D\":[\"B\",\"C\"]\n",
+        "}\n",
+        "colors=['Red',\"Green\",\"Blue\"]"
+      ],
+      "metadata": {
+        "id": "Qu-fYuMlQ1Ll"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "bBW7Rql0Qud0"
+      },
+      "outputs": [],
+      "source": [
+        "def is_consistent(region,color,assignment):\n",
+        "  for neighbor in map_data[region]:\n",
+        "    if neighbor in assignment and assignment[neighbor]==color:\n",
+        "      return False\n",
+        "  return True"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def solve_map(assignment):\n",
+        "  if len(assignment)==len(map_data):\n",
+        "    return assignment\n",
+        "  for region in map_data:\n",
+        "    if region not in assignment:\n",
+        "      break\n",
+        "  for color in colors:\n",
+        "    if is_consistent(region,color,assignment):\n",
+        "      assignment[region]=color\n",
+        "      result=solve_map(assignment)\n",
+        "      if result is not None:\n",
+        "        return result\n",
+        "      del assignment[region]\n",
+        "  return None\n"
+      ],
+      "metadata": {
+        "id": "LHW243V9Tnzx"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "solution=solve_map({})\n",
+        "print(\"solution:\")\n",
+        "for region,color in solution.items():\n",
+        "  print(region,\"=\",color)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "cV9Ib62TVmdC",
+        "outputId": "3005949c-1c8f-41b3-810c-1d145afebf59"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "solution:\n",
+            "A = Red\n",
+            "B = Green\n",
+            "C = Blue\n",
+            "D = Red\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "KKq-ZS2eWV7l"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
